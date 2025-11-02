@@ -23,19 +23,20 @@ else
     echo "aria2 is already installed"
 fi
 
-if [ "$install_sageattention" == "true" ]; then
-echo "Building SageAttention in the background"
-(
-  git clone https://github.com/thu-ml/SageAttention.git
-  cd SageAttention || exit 1
-  python3 setup.py install
-  cd /
-  pip install --no-cache-dir triton
-) &> /var/log/sage_build.log &      # run in background, log output
+echo "Starting SageAttention build..."
 
-BUILD_PID=$!
-echo "Background build started (PID: $BUILD_PID)"
-fi
+(
+    export EXT_PARALLEL=4 NVCC_APPEND_FLAGS="--threads 8" MAX_JOBS=32
+    cd /tmp
+    git clone https://github.com/thu-ml/SageAttention.git
+    cd SageAttention
+    git reset --hard 68de379
+    pip install -e .
+    echo "SageAttention build completed" > /tmp/sage_build_done
+) > /tmp/sage_build.log 2>&1 &
+
+SAGE_PID=$!
+echo "SageAttention build started in background (PID: $SAGE_PID)"
 
 # Check if NETWORK_VOLUME exists; if not, use root directory instead
 if [ ! -d "$NETWORK_VOLUME" ]; then
@@ -230,15 +231,25 @@ fi
 echo "Config file setup complete!"
 echo "Default preview method updated to 'auto'"
 
-if [ "$install_sageattention" == "true" ]; then
-while kill -0 "$BUILD_PID" 2>/dev/null; do
-    echo "🛠️ Building SageAttention in progress... (this can take around 5 minutes)"
+# Wait for SageAttention build to complete and check status
+while kill -0 "$SAGE_PID" 2>/dev/null; do
+    echo "🛠️  SageAttention is currently installing... (this can take around 5 minutes)"
     sleep 10
 done
+
+# Check if build completed successfully
+SAGE_ATTENTION_AVAILABLE=false
+if [ -f "/tmp/sage_build_done" ]; then
+    SAGE_ATTENTION_AVAILABLE=true
+    echo "✅ SageAttention build completed successfully"
+else
+    echo "⚠️  SageAttention build failed. Launching ComfyUI without --use-sage-attention flag"
+    echo "Build log available at /tmp/sage_build.log"
 fi
+
 URL="http://127.0.0.1:8188"
 echo "Starting ComfyUI"
-if [ "$install_sageattention" == "true" ]; then
+if [ "$SAGE_ATTENTION_AVAILABLE" == "true" ]; then
   nohup python3 "$NETWORK_VOLUME/ComfyUI/main.py" --listen --use-sage-attention > "$NETWORK_VOLUME/comfyui_${RUNPOD_POD_ID}_nohup.log" 2>&1 &
 else
   nohup python3 "$NETWORK_VOLUME/ComfyUI/main.py" --listen > "$NETWORK_VOLUME/comfyui_${RUNPOD_POD_ID}_nohup.log" 2>&1 &
