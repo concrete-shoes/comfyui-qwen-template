@@ -114,6 +114,23 @@ download_model "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main
 download_model "https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-8steps-V1.1.safetensors" "$LORAS_DIR/Qwen-Image-Lightning-8steps-V1.1.safetensors"
 download_model "https://objectstorage.us-phoenix-1.oraclecloud.com/n/ax6ygfvpvzka/b/open-modeldb-files/o/1x-ITF-SkinDiffDetail-Lite-v1.pth" "$UPSCALE_MODELS_DIR/1x-ITF-SkinDiffDetail-Lite-v1.pth"
 
+# Download MultiAngle.safetensors to LORAS_DIR using wget
+mkdir -p "$LORAS_DIR"
+if [ ! -f "$LORAS_DIR/MultiAngle.safetensors" ]; then
+    echo "📥 Downloading MultiAngle.safetensors to $LORAS_DIR..."
+    wget -O "$LORAS_DIR/MultiAngle.safetensors" "https://huggingface.co/dx8152/Qwen-Edit-2509-Multiple-angles/resolve/main/%E9%95%9C%E5%A4%B4%E8%BD%AC%E6%8D%A2.safetensors"
+else
+    echo "✅ MultiAngle.safetensors already exists, skipping download."
+fi
+
+# Download Qwen-Rapid-AIO-LiteNSFW-v9.safetensors to DIFFUSION_MODELS_DIR using wget
+mkdir -p "$DIFFUSION_MODELS_DIR"
+if [ ! -f "$DIFFUSION_MODELS_DIR/Qwen-Rapid-AIO-LiteNSFW-v9.safetensors" ]; then
+    echo "📥 Downloading Qwen-Rapid-AIO-LiteNSFW-v9.safetensors to $DIFFUSION_MODELS_DIR..."
+    wget -O "$DIFFUSION_MODELS_DIR/Qwen-Rapid-AIO-LiteNSFW-v9.safetensors" "https://huggingface.co/Phr00t/Qwen-Image-Edit-Rapid-AIO/resolve/main/v9/Qwen-Rapid-AIO-LiteNSFW-v9.safetensors"
+else
+    echo "✅ Qwen-Rapid-AIO-LiteNSFW-v9.safetensors already exists, skipping download."
+fi
 
 # Download additional models
 echo "📥 Starting additional model downloads..."
