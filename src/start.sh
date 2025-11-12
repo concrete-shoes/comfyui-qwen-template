@@ -118,7 +118,7 @@ download_model "https://objectstorage.us-phoenix-1.oraclecloud.com/n/ax6ygfvpvzk
 mkdir -p "$LORAS_DIR"
 if [ ! -f "$LORAS_DIR/MultiAngle.safetensors" ]; then
     echo "📥 Downloading MultiAngle.safetensors to $LORAS_DIR..."
-    wget -O "$LORAS_DIR/MultiAngle.safetensors" "https://huggingface.co/dx8152/Qwen-Edit-2509-Multiple-angles/resolve/main/%E9%95%9C%E5%A4%B4%E8%BD%AC%E6%8D%A2.safetensors"
+    wget -O "$LORAS_DIR/MultiAngle.safetensors" "https://huggingface.co/Hearmeman/MultiAngleQwen/resolve/main/MultiAngle.safetensors"
 else
     echo "✅ MultiAngle.safetensors already exists, skipping download."
 fi
