@@ -77,6 +77,17 @@ else
     echo "✅ ComfyUI-VAE-Utils already exists, skipping clone."
 fi
 
+# Clone ComfyUI-FSampler custom node
+FSAMPLER_DIR="$CUSTOM_NODES_DIR/ComfyUI-FSampler"
+if [ ! -d "$FSAMPLER_DIR" ]; then
+    echo "📥 Cloning ComfyUI-FSampler custom node..."
+    cd "$CUSTOM_NODES_DIR"
+    git clone https://github.com/obisin/ComfyUI-FSampler.git
+    echo "✅ ComfyUI-FSampler cloned successfully"
+else
+    echo "✅ ComfyUI-FSampler already exists, skipping clone."
+fi
+
 echo "Downloading CivitAI download script to /usr/local/bin"
 git clone "https://github.com/Hearmeman24/CivitAI_Downloader.git" || { echo "Git clone failed"; exit 1; }
 mv CivitAI_Downloader/download_with_aria.py "/usr/local/bin/" || { echo "Move failed"; exit 1; }
