@@ -64,6 +64,19 @@ else
     echo "Directory already exists, skipping move."
 fi
 
+# Clone ComfyUI-VAE-Utils custom node
+CUSTOM_NODES_DIR="$NETWORK_VOLUME/ComfyUI/custom_nodes"
+VAE_UTILS_DIR="$CUSTOM_NODES_DIR/ComfyUI-VAE-Utils"
+mkdir -p "$CUSTOM_NODES_DIR"
+if [ ! -d "$VAE_UTILS_DIR" ]; then
+    echo "📥 Cloning ComfyUI-VAE-Utils custom node..."
+    cd "$CUSTOM_NODES_DIR"
+    git clone https://github.com/lrzjason/ComfyUI-VAE-Utils.git
+    echo "✅ ComfyUI-VAE-Utils cloned successfully"
+else
+    echo "✅ ComfyUI-VAE-Utils already exists, skipping clone."
+fi
+
 echo "Downloading CivitAI download script to /usr/local/bin"
 git clone "https://github.com/Hearmeman24/CivitAI_Downloader.git" || { echo "Git clone failed"; exit 1; }
 mv CivitAI_Downloader/download_with_aria.py "/usr/local/bin/" || { echo "Move failed"; exit 1; }
@@ -111,6 +124,7 @@ download_model "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main
 download_model "https://huggingface.co/Comfy-Org/Qwen-Image-Edit_ComfyUI/resolve/main/split_files/diffusion_models/qwen_image_edit_2509_bf16.safetensors" "$DIFFUSION_MODELS_DIR/qwen_image_edit_2509_bf16.safetensors"
 download_model "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/text_encoders/qwen_2.5_vl_7b.safetensors" "$TEXT_ENCODERS_DIR/qwen_2.5_vl_7b.safetensors"
 download_model "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/vae/qwen_image_vae.safetensors" "$VAE_DIR/qwen_image_vae.safetensors"
+download_model "https://huggingface.co/spacepxl/Wan2.1-VAE-upscale2x/resolve/main/Wan2.1_VAE_upscale2x_imageonly_real_v1.safetensors" "$VAE_DIR/Wan2.1_VAE_upscale2x_imageonly_real_v1.safetensors"
 download_model "https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-8steps-V1.1.safetensors" "$LORAS_DIR/Qwen-Image-Lightning-8steps-V1.1.safetensors"
 download_model "https://objectstorage.us-phoenix-1.oraclecloud.com/n/ax6ygfvpvzka/b/open-modeldb-files/o/1x-ITF-SkinDiffDetail-Lite-v1.pth" "$UPSCALE_MODELS_DIR/1x-ITF-SkinDiffDetail-Lite-v1.pth"
 
