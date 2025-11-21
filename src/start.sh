@@ -49,6 +49,36 @@ else
     jupyter-lab --ip=0.0.0.0 --allow-root --no-browser --NotebookApp.token='' --NotebookApp.password='' --ServerApp.allow_origin='*' --ServerApp.allow_credentials=True --notebook-dir=/workspace &
 fi
 
+# Check if NETWORK_VOLUME is /workspace and set up extra model paths (only if IS_DEV is true)
+USE_EXTRA_MODEL_PATHS=false
+if [ "$IS_DEV" = "true" ] && [ "$NETWORK_VOLUME" = "/workspace" ]; then
+    echo "IS_DEV is true and NETWORK_VOLUME is /workspace. Setting up extra model paths..."
+    
+    # Create /models/diffusion_models directory
+    mkdir -p /models/diffusion_models
+    
+    # Copy all .safetensors files from /workspace/ComfyUI/models/diffusion_models to /models/diffusion_models in background
+    if [ -d "/workspace/ComfyUI/models/diffusion_models" ]; then
+        echo "Copying .safetensors files from /workspace/ComfyUI/models/diffusion_models to /models/diffusion_models in background..."
+        (
+            find /workspace/ComfyUI/models/diffusion_models -name "*.safetensors" -type f | while read -r file; do
+                filename=$(basename "$file")
+                cp "$file" "/models/diffusion_models/disk_${filename}"
+            done
+            echo "✅ Finished copying .safetensors files to /models/diffusion_models"
+        ) > /tmp/model_copy.log 2>&1 &
+        USE_EXTRA_MODEL_PATHS=true
+    else
+        echo "⚠️  Source directory /workspace/ComfyUI/models/diffusion_models does not exist. Skipping copy."
+    fi
+else
+    if [ "$IS_DEV" != "true" ]; then
+        echo "IS_DEV is not set to true. Skipping extra model paths setup."
+    elif [ "$NETWORK_VOLUME" != "/workspace" ]; then
+        echo "NETWORK_VOLUME is not /workspace. Skipping extra model paths setup."
+    fi
+fi
+
 COMFYUI_DIR="$NETWORK_VOLUME/ComfyUI"
 WORKFLOW_DIR="$NETWORK_VOLUME/ComfyUI/user/default/workflows"
 MODEL_WHITELIST_DIR="$NETWORK_VOLUME/ComfyUI/user/default/ComfyUI-Impact-Subpack/model-whitelist.txt"
@@ -291,11 +321,19 @@ fi
 
 URL="http://127.0.0.1:8188"
 echo "Starting ComfyUI"
+
+# Build ComfyUI command with optional flags
+COMFYUI_CMD="python3 $NETWORK_VOLUME/ComfyUI/main.py --listen"
+
 if [ "$SAGE_ATTENTION_AVAILABLE" == "true" ]; then
-  nohup python3 "$NETWORK_VOLUME/ComfyUI/main.py" --listen --use-sage-attention > "$NETWORK_VOLUME/comfyui_${RUNPOD_POD_ID}_nohup.log" 2>&1 &
-else
-  nohup python3 "$NETWORK_VOLUME/ComfyUI/main.py" --listen > "$NETWORK_VOLUME/comfyui_${RUNPOD_POD_ID}_nohup.log" 2>&1 &
+  COMFYUI_CMD="$COMFYUI_CMD --use-sage-attention"
 fi
+
+if [ "$USE_EXTRA_MODEL_PATHS" == "true" ]; then
+  COMFYUI_CMD="$COMFYUI_CMD --extra-model-paths-config /comfyui-qwen-template/src/extra_model_paths.yaml"
+fi
+
+nohup $COMFYUI_CMD > "$NETWORK_VOLUME/comfyui_${RUNPOD_POD_ID}_nohup.log" 2>&1 &
 until curl --silent --fail "$URL" --output /dev/null; do
   echo "🔄  ComfyUI Starting Up... You can view the startup logs here: $NETWORK_VOLUME/comfyui_${RUNPOD_POD_ID}_nohup.log"
   sleep 2
