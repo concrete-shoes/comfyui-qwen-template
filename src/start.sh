@@ -169,6 +169,17 @@ download_model "https://huggingface.co/spacepxl/Wan2.1-VAE-upscale2x/resolve/mai
 download_model "https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-8steps-V1.1.safetensors" "$LORAS_DIR/Qwen-Image-Lightning-8steps-V1.1.safetensors"
 download_model "https://objectstorage.us-phoenix-1.oraclecloud.com/n/ax6ygfvpvzka/b/open-modeldb-files/o/1x-ITF-SkinDiffDetail-Lite-v1.pth" "$UPSCALE_MODELS_DIR/1x-ITF-SkinDiffDetail-Lite-v1.pth"
 
+# Download z_image models if download_z_image is set to true
+if [ "$download_z_image" = "true" ]; then
+    echo "📥 download_z_image is set to true. Downloading z_image models..."
+    download_model "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/diffusion_models/z_image_turbo_bf16.safetensors" "$DIFFUSION_MODELS_DIR/z_image_turbo_bf16.safetensors"
+    download_model "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/text_encoders/qwen_3_4b.safetensors" "$TEXT_ENCODERS_DIR/qwen_3_4b.safetensors"
+    download_model "https://huggingface.co/modelzpalace/ae.safetensors/resolve/main/ae.safetensors" "$VAE_DIR/ae.safetensors"
+    echo "✅ z_image model downloads scheduled"
+else
+    echo "⏭️  download_z_image is not set to true. Skipping z_image model downloads."
+fi
+
 # Download MultiAngle.safetensors to LORAS_DIR using wget
 mkdir -p "$LORAS_DIR"
 if [ ! -f "$LORAS_DIR/MultiAngle.safetensors" ]; then
