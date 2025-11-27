@@ -740,7 +740,7 @@
         }
       },
       "widgets_values": [
-        "Qwen-Rapid-AIO-LiteNSFW-v9.safetensors",
+        "qwen_image_edit_2509_bf16.safetensors",
         "default"
       ],
       "color": "#323",

@@ -196,15 +196,6 @@ else
     echo "✅ MultiAngle.safetensors already exists, skipping download."
 fi
 
-# Download Qwen-Rapid-AIO-LiteNSFW-v9.safetensors to DIFFUSION_MODELS_DIR using wget
-mkdir -p "$DIFFUSION_MODELS_DIR"
-if [ ! -f "$DIFFUSION_MODELS_DIR/Qwen-Rapid-AIO-LiteNSFW-v9.safetensors" ]; then
-    echo "📥 Downloading Qwen-Rapid-AIO-LiteNSFW-v9.safetensors to $DIFFUSION_MODELS_DIR..."
-    wget -O "$DIFFUSION_MODELS_DIR/Qwen-Rapid-AIO-LiteNSFW-v9.safetensors" "https://huggingface.co/Phr00t/Qwen-Image-Edit-Rapid-AIO/resolve/main/v9/Qwen-Rapid-AIO-LiteNSFW-v9.safetensors"
-else
-    echo "✅ Qwen-Rapid-AIO-LiteNSFW-v9.safetensors already exists, skipping download."
-fi
-
 # Download additional models
 echo "📥 Starting additional model downloads..."
 
