@@ -94,6 +94,13 @@ else
     echo "Directory already exists, skipping move."
 fi
 
+# Update ComfyUI to master branch and pull latest changes
+echo "Updating ComfyUI repository..."
+cd "$COMFYUI_DIR"
+git checkout master
+git pull
+echo "✅ ComfyUI repository updated"
+
 # Clone ComfyUI-VAE-Utils custom node
 CUSTOM_NODES_DIR="$NETWORK_VOLUME/ComfyUI/custom_nodes"
 VAE_UTILS_DIR="$CUSTOM_NODES_DIR/ComfyUI-VAE-Utils"
