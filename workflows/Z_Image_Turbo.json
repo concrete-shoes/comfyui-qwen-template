@@ -18,7 +18,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 11,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
@@ -318,6 +318,91 @@
       ]
     },
     {
+      "id": 96,
+      "type": "UNETLoader",
+      "pos": [
+        -1324.97509765625,
+        -246.21925354003906
+      ],
+      "size": [
+        302.80438232421875,
+        82
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            371
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.52",
+        "Node name for S&R": "UNETLoader",
+        "ue_properties": {
+          "version": "7.0.1",
+          "widget_ue_connectable": {
+            "unet_name": true,
+            "weight_dtype": true
+          }
+        }
+      },
+      "widgets_values": [
+        "z_image_turbo_bf16.safetensors",
+        "default"
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 39,
+      "type": "VAELoader",
+      "pos": [
+        -1318.051025390625,
+        85.60014343261719
+      ],
+      "size": [
+        288.9561462402344,
+        58.316253662109375
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "slot_index": 0,
+          "links": [
+            76
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.49",
+        "Node name for S&R": "VAELoader",
+        "ue_properties": {
+          "version": "7.0.1",
+          "widget_ue_connectable": {}
+        }
+      },
+      "widgets_values": [
+        "ae.safetensors"
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
       "id": 103,
       "type": "LoraLoaderModelOnly",
       "pos": [
@@ -363,6 +448,56 @@
       ]
     },
     {
+      "id": 101,
+      "type": "LoraLoaderModelOnly",
+      "pos": [
+        -924.6854858398438,
+        -293.9217224121094
+      ],
+      "size": [
+        377.3145751953125,
+        83.44073486328125
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 371
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            429
+          ]
+        }
+      ],
+      "title": "HMFemme LoRA",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.52",
+        "Node name for S&R": "LoraLoaderModelOnly",
+        "ue_properties": {
+          "version": "7.0.1",
+          "widget_ue_connectable": {
+            "lora_name": true,
+            "strength_model": true
+          }
+        }
+      },
+      "widgets_values": [
+        "HMFemme_V1.safetensors",
+        0.89
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
       "id": 6,
       "type": "CLIPTextEncode",
       "pos": [
@@ -376,7 +511,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
@@ -431,7 +566,7 @@
         58
       ],
       "flags": {},
-      "order": 1,
+      "order": 3,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -586,7 +721,7 @@
         108.1858139038086
       ],
       "flags": {},
-      "order": 2,
+      "order": 4,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -700,91 +835,6 @@
       "widgets_values": []
     },
     {
-      "id": 152,
-      "type": "Text Prompt (JPS)",
-      "pos": [
-        -479.5274353027344,
-        -349.86773681640625
-      ],
-      "size": [
-        423.79730224609375,
-        225.60888671875
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "links": [
-            336
-          ]
-        }
-      ],
-      "title": "Positive Prompt",
-      "properties": {
-        "aux_id": "JPS-GER/ComfyUI_JPS-Nodes",
-        "ver": "0e2a9aca02b17dde91577bfe4b65861df622dcaf",
-        "Node name for S&R": "Text Prompt (JPS)",
-        "cnr_id": "ComfyUI_JPS-Nodes",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.1",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        "An amateur photo taken from a smartphone camera showing a 26-year-old woman with a refined hourglass figure and a large natural bust, long black hair slightly damp from the light rain, natural skin texture with cool highlights along her cheekbones and collarbones.\nCaptured in a tight chest-up portrait beneath a concrete overpass at night, she lifts her narrow black sunglasses with two fingers, her glossy jet-black nail polish catching a faint sheen as her eyes come into view with a slow, deliberate gesture.\nShe wears a black trench coat left loosely open, revealing a deep wine-red satin corset with subtle reflective stitching and structured boning that naturally contours around her bust and waist, creating a striking contrast against the monochrome environment.\nBehind her, the overpass pillars fade into heavy shadow, distant headlights sweep across the rain-slick pavement, and falling raindrops catch small glimmers of light.\nThe scene is lit in classic film-noir fashion: a single overhead streetlamp casts sharp, angular shadows across her face and coat, while the polished surface of the red corset reflects tiny highlights, making it the dramatic centerpiece of the shot as she lifts her sunglasses"
-      ],
-      "color": "#232",
-      "bgcolor": "#353"
-    },
-    {
-      "id": 96,
-      "type": "UNETLoader",
-      "pos": [
-        -1324.97509765625,
-        -246.21925354003906
-      ],
-      "size": [
-        302.80438232421875,
-        82
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            371
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.52",
-        "Node name for S&R": "UNETLoader",
-        "ue_properties": {
-          "version": "7.0.1",
-          "widget_ue_connectable": {
-            "unet_name": true,
-            "weight_dtype": true
-          }
-        }
-      },
-      "widgets_values": [
-        "qwen_image_bf16.safetensors",
-        "default"
-      ],
-      "color": "#223",
-      "bgcolor": "#335"
-    },
-    {
       "id": 99,
       "type": "CLIPLoader",
       "pos": [
@@ -823,7 +873,7 @@
         }
       },
       "widgets_values": [
-        "qwen_2.5_vl_7b.safetensors",
+        "qwen_3_4b.safetensors",
         "qwen_image",
         "default"
       ],
@@ -831,46 +881,46 @@
       "bgcolor": "#335"
     },
     {
-      "id": 39,
-      "type": "VAELoader",
+      "id": 152,
+      "type": "Text Prompt (JPS)",
       "pos": [
-        -1318.051025390625,
-        85.60014343261719
+        -479.5274353027344,
+        -349.86773681640625
       ],
       "size": [
-        288.9561462402344,
-        58.316253662109375
+        423.79730224609375,
+        225.60888671875
       ],
-      "flags": {
-        "collapsed": false
-      },
+      "flags": {},
       "order": 6,
       "mode": 0,
       "inputs": [],
       "outputs": [
         {
-          "name": "VAE",
-          "type": "VAE",
-          "slot_index": 0,
+          "name": "text",
+          "type": "STRING",
           "links": [
-            76
+            336
           ]
         }
       ],
+      "title": "Positive Prompt",
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.49",
-        "Node name for S&R": "VAELoader",
+        "aux_id": "JPS-GER/ComfyUI_JPS-Nodes",
+        "ver": "0e2a9aca02b17dde91577bfe4b65861df622dcaf",
+        "Node name for S&R": "Text Prompt (JPS)",
+        "cnr_id": "ComfyUI_JPS-Nodes",
         "ue_properties": {
-          "version": "7.0.1",
-          "widget_ue_connectable": {}
+          "widget_ue_connectable": {},
+          "version": "7.1",
+          "input_ue_unconnectable": {}
         }
       },
       "widgets_values": [
-        "qwen_image_vae.safetensors"
+        "An amateur photo taken from a smartphone camera showing a 26-year-old woman with a refined hourglass figure and a large natural bust, long black hair slightly damp from the light rain, natural skin texture with cool highlights along her cheekbones and collarbones.\nCaptured in a tight chest-up portrait beneath a concrete overpass at night, she lifts her narrow black sunglasses with two fingers, her glossy jet-black nail polish catching a faint sheen as her eyes come into view with a slow, deliberate gesture.\nShe wears a black trench coat left loosely open, revealing a deep wine-red satin corset with subtle reflective stitching and structured boning that naturally contours around her bust and waist, creating a striking contrast against the monochrome environment.\nBehind her, the overpass pillars fade into heavy shadow, distant headlights sweep across the rain-slick pavement, and falling raindrops catch small glimmers of light.\nThe scene is lit in classic film-noir fashion: a single overhead streetlamp casts sharp, angular shadows across her face and coat, while the polished surface of the red corset reflects tiny highlights, making it the dramatic centerpiece of the shot as she lifts her sunglasses"
       ],
-      "color": "#223",
-      "bgcolor": "#335"
+      "color": "#232",
+      "bgcolor": "#353"
     },
     {
       "id": 196,
@@ -910,7 +960,7 @@
         }
       },
       "widgets_values": [
-        1328,
+        1920,
         "fixed"
       ],
       "color": "#2a363b",
@@ -954,7 +1004,7 @@
         }
       },
       "widgets_values": [
-        1328,
+        1080,
         "fixed"
       ],
       "color": "#2a363b",
@@ -1023,64 +1073,14 @@
         }
       },
       "widgets_values": [
-        951861602393884,
+        40800937036869,
         "randomize",
-        28,
-        2.4,
+        12,
+        1,
         "er_sde",
         "simple",
         1
       ]
-    },
-    {
-      "id": 101,
-      "type": "LoraLoaderModelOnly",
-      "pos": [
-        -924.6854858398438,
-        -293.9217224121094
-      ],
-      "size": [
-        377.3145751953125,
-        83.44073486328125
-      ],
-      "flags": {},
-      "order": 9,
-      "mode": 4,
-      "inputs": [
-        {
-          "name": "model",
-          "type": "MODEL",
-          "link": 371
-        }
-      ],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            429
-          ]
-        }
-      ],
-      "title": "HMFemme LoRA",
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.52",
-        "Node name for S&R": "LoraLoaderModelOnly",
-        "ue_properties": {
-          "version": "7.0.1",
-          "widget_ue_connectable": {
-            "lora_name": true,
-            "strength_model": true
-          }
-        }
-      },
-      "widgets_values": [
-        "HMFemme_V1.safetensors",
-        0.89
-      ],
-      "color": "#232",
-      "bgcolor": "#353"
     }
   ],
   "links": [
@@ -1331,10 +1331,10 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.797202450000003,
+      "scale": 0.7972024500000027,
       "offset": [
-        1997.2415003524638,
-        763.5147804824899
+        988.6496074616417,
+        783.0275041130193
       ]
     },
     "frontendVersion": "1.26.13",

@@ -101,6 +101,11 @@ git checkout master
 git pull
 echo "✅ ComfyUI repository updated"
 
+# Install ComfyUI requirements
+echo "Installing ComfyUI requirements..."
+/opt/venv/bin/python3 -m pip install -r "$NETWORK_VOLUME/ComfyUI/requirements.txt"
+echo "✅ ComfyUI requirements installed"
+
 # Clone ComfyUI-VAE-Utils custom node
 CUSTOM_NODES_DIR="$NETWORK_VOLUME/ComfyUI/custom_nodes"
 VAE_UTILS_DIR="$CUSTOM_NODES_DIR/ComfyUI-VAE-Utils"
