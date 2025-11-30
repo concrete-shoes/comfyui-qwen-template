@@ -110,14 +110,14 @@ echo "✅ ComfyUI requirements installed"
 CUSTOM_NODES_DIR="$NETWORK_VOLUME/ComfyUI/custom_nodes"
 VAE_UTILS_DIR="$CUSTOM_NODES_DIR/ComfyUI-VAE-Utils"
 mkdir -p "$CUSTOM_NODES_DIR"
-if [ ! -d "$VAE_UTILS_DIR" ]; then
-    echo "📥 Cloning ComfyUI-VAE-Utils custom node..."
-    cd "$CUSTOM_NODES_DIR"
-    git clone https://github.com/lrzjason/ComfyUI-VAE-Utils.git
-    echo "✅ ComfyUI-VAE-Utils cloned successfully"
-else
-    echo "✅ ComfyUI-VAE-Utils already exists, skipping clone."
+if [ -d "$VAE_UTILS_DIR" ]; then
+    echo "🗑️  Deleting existing ComfyUI-VAE-Utils directory..."
+    rm -rf "$VAE_UTILS_DIR"
 fi
+echo "📥 Cloning ComfyUI-VAE-Utils custom node..."
+cd "$CUSTOM_NODES_DIR"
+git clone https://github.com/spacepxl/ComfyUI-VAE-Utils.git
+echo "✅ ComfyUI-VAE-Utils cloned successfully"
 
 # Clone ComfyUI-FSampler custom node
 FSAMPLER_DIR="$CUSTOM_NODES_DIR/ComfyUI-FSampler"
