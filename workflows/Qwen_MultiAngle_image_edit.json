@@ -1,8 +1,8 @@
 {
-  "id": "d92b100f-cc99-4988-8ba7-8144a43ad2e0",
+  "id": "79f1be53-ec7b-47b7-8442-7e634be865d7",
   "revision": 0,
   "last_node_id": 194,
-  "last_link_id": 345,
+  "last_link_id": 346,
   "nodes": [
     {
       "id": 81,
@@ -303,82 +303,6 @@
       "bgcolor": "#535"
     },
     {
-      "id": 179,
-      "type": "TextEncodeQwenImageEditPlus",
-      "pos": [
-        -2957.96044921875,
-        655.4183349609375
-      ],
-      "size": [
-        400,
-        200
-      ],
-      "flags": {},
-      "order": 15,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 307
-        },
-        {
-          "name": "vae",
-          "shape": 7,
-          "type": "VAE",
-          "link": 295
-        },
-        {
-          "name": "image1",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": 332
-        },
-        {
-          "name": "image2",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": null
-        },
-        {
-          "name": "image3",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": null
-        },
-        {
-          "name": "prompt",
-          "type": "STRING",
-          "widget": {
-            "name": "prompt"
-          },
-          "link": 330
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            339
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.60",
-        "Node name for S&R": "TextEncodeQwenImageEditPlus",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.1",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        "将镜头向左旋转45度（Rotate the camera 45 degrees to the left."
-      ]
-    },
-    {
       "id": 182,
       "type": "TextEncodeQwenImageEditPlus",
       "pos": [
@@ -522,61 +446,18 @@
       "mode": 0,
       "inputs": [],
       "outputs": [],
-      "properties": {},
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.1",
+          "input_ue_unconnectable": {}
+        }
+      },
       "widgets_values": [
         "# Qwen Image Resolutions\n\n\"1:1\": (1328, 1328)   \n\"16:9\": (1664, 928)  \n\"9:16\": (928, 1664)  \n\"4:3\": (1472, 1140)  \n\"3:4\": (1140, 1472)  \n\"3:2\": (1584, 1056)  \n\"2:3\": (1056, 1584)  "
       ],
       "color": "#432",
       "bgcolor": "#653"
-    },
-    {
-      "id": 189,
-      "type": "CR Prompt List",
-      "pos": [
-        -2954.517578125,
-        894.4981689453125
-      ],
-      "size": [
-        396.50634765625,
-        484.78009033203125
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "prompt",
-          "shape": 6,
-          "type": "STRING",
-          "links": [
-            330
-          ]
-        },
-        {
-          "name": "body_text",
-          "shape": 6,
-          "type": "STRING",
-          "links": null
-        },
-        {
-          "name": "show_help",
-          "type": "STRING",
-          "links": null
-        }
-      ],
-      "properties": {
-        "cnr_id": "ComfyUI_Comfyroll_CustomNodes",
-        "ver": "d78b780ae43fcf8c6b7c6505e6ffb4584281ceca",
-        "Node name for S&R": "CR Prompt List"
-      },
-      "widgets_values": [
-        "",
-        "将镜头向左旋转45度（Rotate the camera 45 degrees to the left.\n将镜头向前移动（Move the camera forward.\n将镜头向左移动（Move the camera left.\n将镜头向右移动（Move the camera right.\n将镜头向下移动（Move the camera down.\n将镜头向左旋转45度（Rotate the camera 45 degrees to the left.） 将镜头向右旋转45度（Rotate the camera 45 degrees to the right.) 将镜头转为俯视（Turn the camera to a top-down view.)\n将镜头转为广角镜头（Turn the camera to a wide-angle lens.)\n将镜头转为特写镜头（Turn the camera to a close-up.）",
-        "",
-        0,
-        1000
-      ]
     },
     {
       "id": 162,
@@ -592,7 +473,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 6,
+      "order": 5,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -662,6 +543,122 @@
       "bgcolor": "#335"
     },
     {
+      "id": 179,
+      "type": "TextEncodeQwenImageEditPlus",
+      "pos": [
+        -2957.96044921875,
+        655.4183349609375
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 307
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 295
+        },
+        {
+          "name": "image1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 332
+        },
+        {
+          "name": "image2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": 346
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            339
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.60",
+        "Node name for S&R": "TextEncodeQwenImageEditPlus",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.1",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "将镜头向左旋转45度（Rotate the camera 45 degrees to the left."
+      ]
+    },
+    {
+      "id": 121,
+      "type": "UNETLoader",
+      "pos": [
+        -3966.411376953125,
+        610.4328002929688
+      ],
+      "size": [
+        270,
+        82
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            204
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.40",
+        "Node name for S&R": "UNETLoader",
+        "ue_properties": {
+          "version": "7.0.1",
+          "widget_ue_connectable": {}
+        }
+      },
+      "widgets_values": [
+        "disk_qwen_image_edit_2509_bf16.safetensors",
+        "default"
+      ],
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
       "id": 169,
       "type": "ModelSamplingAuraFlow",
       "pos": [
@@ -703,48 +700,8 @@
         }
       },
       "widgets_values": [
-        0.3
+        2.4
       ]
-    },
-    {
-      "id": 121,
-      "type": "UNETLoader",
-      "pos": [
-        -3966.411376953125,
-        610.4328002929688
-      ],
-      "size": [
-        270,
-        82
-      ],
-      "flags": {},
-      "order": 7,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            204
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.40",
-        "Node name for S&R": "UNETLoader",
-        "ue_properties": {
-          "version": "7.0.1",
-          "widget_ue_connectable": {}
-        }
-      },
-      "widgets_values": [
-        "qwen_image_edit_2509_bf16.safetensors",
-        "default"
-      ],
-      "color": "#323",
-      "bgcolor": "#535"
     },
     {
       "id": 192,
@@ -794,15 +751,27 @@
       "properties": {
         "cnr_id": "comfy-core",
         "ver": "0.3.60",
-        "Node name for S&R": "KSampler"
+        "Node name for S&R": "KSampler",
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "seed": true,
+            "steps": true,
+            "cfg": true,
+            "sampler_name": true,
+            "scheduler": true,
+            "denoise": true
+          },
+          "version": "7.1",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
-        357587716551811,
+        289071233628954,
         "randomize",
-        6,
+        8,
         1,
-        "sa_solver",
-        "beta",
+        "res_2s",
+        "simple",
         1
       ]
     },
@@ -862,8 +831,8 @@
       "widgets_values": [
         "MultiAngle.safetensors",
         1,
-        "None",
-        0.8000000000000002,
+        "Qwen-Image-Lightning-8steps-V2.0.safetensors",
+        0.9,
         "None",
         0.6000000000000001,
         "None",
@@ -873,58 +842,11 @@
       "bgcolor": "#535"
     },
     {
-      "id": 166,
-      "type": "LoadImage",
-      "pos": [
-        -3990.421630859375,
-        1118.0101318359375
-      ],
-      "size": [
-        274.080078125,
-        314.00006103515625
-      ],
-      "flags": {},
-      "order": 8,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            331
-          ]
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null
-        }
-      ],
-      "title": "Reference Image 1",
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.50",
-        "Node name for S&R": "LoadImage",
-        "ue_properties": {
-          "widget_ue_connectable": {
-            "image": true,
-            "upload": true
-          },
-          "version": "7.0.1"
-        }
-      },
-      "widgets_values": [
-        "ComfyUI_temp_ykmlc_00193_.png",
-        "image"
-      ]
-    },
-    {
       "id": 191,
       "type": "ImageResizeKJv2",
       "pos": [
-        -3696.001953125,
-        1119.911376953125
+        -3693.7346138699713,
+        1114.606070366208
       ],
       "size": [
         270,
@@ -977,18 +899,32 @@
       "properties": {
         "cnr_id": "comfyui-kjnodes",
         "ver": "9d7af919b91838fb22e31ad0107a6ddcf8bd7f3f",
-        "Node name for S&R": "ImageResizeKJv2"
+        "Node name for S&R": "ImageResizeKJv2",
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "width": true,
+            "height": true,
+            "upscale_method": true,
+            "keep_proportion": true,
+            "pad_color": true,
+            "crop_position": true,
+            "divisible_by": true,
+            "device": true
+          },
+          "version": "7.1",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         1144,
         1472,
         "nearest-exact",
-        "crop",
+        "resize",
         "0, 0, 0",
         "center",
         2,
         "gpu",
-        "<tr><td>Output: </td><td><b>1</b> x <b>1144</b> x <b>1472 | 19.27MB</b></td></tr>"
+        "<tr><td>Output: </td><td><b>1</b> x <b>1136</b> x <b>1472 | 19.14MB</b></td></tr>"
       ]
     },
     {
@@ -1023,6 +959,113 @@
         }
       },
       "widgets_values": []
+    },
+    {
+      "id": 166,
+      "type": "LoadImage",
+      "pos": [
+        -3990.421630859375,
+        1118.0101318359375
+      ],
+      "size": [
+        274.080078125,
+        314.00006103515625
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            331
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "title": "Reference Image 1",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.50",
+        "Node name for S&R": "LoadImage",
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "image": true,
+            "upload": true
+          },
+          "version": "7.0.1"
+        }
+      },
+      "widgets_values": [
+        "ComfyUI_temp_pibnz_00090_.png",
+        "image"
+      ]
+    },
+    {
+      "id": 189,
+      "type": "CR Prompt List",
+      "pos": [
+        -2954.517578125,
+        894.4981689453125
+      ],
+      "size": [
+        396.50634765625,
+        484.78009033203125
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "shape": 6,
+          "type": "STRING",
+          "links": [
+            346
+          ]
+        },
+        {
+          "name": "body_text",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "show_help",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "ComfyUI_Comfyroll_CustomNodes",
+        "ver": "d78b780ae43fcf8c6b7c6505e6ffb4584281ceca",
+        "Node name for S&R": "CR Prompt List",
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "prepend_text": true,
+            "multiline_text": true,
+            "append_text": true,
+            "start_index": true,
+            "max_rows": true
+          },
+          "version": "7.1",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "",
+        "将镜头向左旋转45度 (Rotate the camera 45 degrees to the left.)\n将镜头向右旋转45度 (Rotate the camera 45 degrees to the right.)\n将镜头转为广角镜头 (Turn the camera to a wide-angle lens.)\n将镜头转为特写镜头 (Turn the camera to a close-up.)\n将镜头向前移动 (Move the camera forward.)\n将镜头向左移动 (Move the camera left.)\n将镜头向右移动 (Move the camera right.)\n将镜头向下移动 (Move the camera down.)\n将镜头转为低视角 (Turn the camera to a bottom-up view (low angle))\n将镜头转为长焦镜头 (Turn the camera to a telephoto lens.)\n将镜头转为标准镜头 (Turn the camera to a standard lens.)\n将镜头转为微距镜头 (Turn the camera to a macro lens.)\n将镜头转为标准镜头 (Turn the camera to a standard lens.)\n将镜头斜向上方移动 (Move the camera diagonally up.)\n将镜头斜向下方移动 (Move the camera diagonally down.)\n将镜头稍微向左旋转 (Slightly rotate the camera to the left.)\n将镜头推拉 (Pull the camera back / dolly out.)\n将镜头推石 (Push the camera in / dolly in.)\n将镜头转为侧视 (Turn the camera to a side view.)\n将镜头转为三分之四视 (Turn the camera to a three-quarter view.)\n将镜头转为俯视 (Turn the camera to a tilted top-down view.)\n将镜头转为低角度 (Turn the camera to a low angle.)\n将镜头转为高角度 (Turn the camera to a high angle.)\n将镜头转为平视 (Turn the camera to eye level.)\n将镜头倾斜 (Tilt the camera.)\n将镜头向左倾斜15度 (Tilt the camera 15 degrees to the left.)\n将镜头对准角色的脸部 (Point the camera at the character's face.)\n将镜头对准角色的眼睛 (Point the camera at the character's eyes.)\n将镜头对准角色的手 (Point the camera at the character's hands.)\n将镜头倾斜 (Tilt the camera.)\n将镜头对准角色的上半身 (Point the camera at the character's upper body.)\n将镜头对准角色的下半身 (Point the camera at the character's lower body.)\n将镜头对准角色的头部 (Point the camera at the character's head.)\n将镜头对准角色的肩膀 (Point the camera at the character's shoulders.)\n将镜头对准角色的胸部 (Point the camera at the character's chest.)\n将镜头对准角色的腰部 (Point the camera at the character's waist.)\n将镜头对准角色的腿部 (Point the camera at the character's legs.)\n将镜头向斜下方移动 (Move the camera diagonally down.)\n将镜头对准角色的躯干 (Point the camera at the character's torso.)",
+        "",
+        0,
+        1000
+      ]
     }
   ],
   "links": [
@@ -1115,14 +1158,6 @@
       "VAE"
     ],
     [
-      330,
-      189,
-      0,
-      179,
-      5,
-      "STRING"
-    ],
-    [
       331,
       166,
       0,
@@ -1201,6 +1236,14 @@
       124,
       1,
       "CLIP"
+    ],
+    [
+      346,
+      189,
+      0,
+      179,
+      5,
+      "STRING"
     ]
   ],
   "groups": [
@@ -1261,14 +1304,15 @@
   "extra": {
     "ue_links": [],
     "ds": {
-      "scale": 0.65884500000001,
+      "scale": 0.6588450000000026,
       "offset": [
-        4167.276159344398,
-        -291.4276445019637
+        5305.081123378027,
+        -292.77324439029684
       ]
     },
     "links_added_by_ue": [],
-    "frontendVersion": "1.26.13"
+    "frontendVersion": "1.33.10",
+    "workflowRendererVersion": "LG"
   },
   "version": 0.4
 }
