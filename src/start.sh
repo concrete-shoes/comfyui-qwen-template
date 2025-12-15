@@ -106,6 +106,11 @@ echo "Installing ComfyUI requirements..."
 /opt/venv/bin/python3 -m pip install -r "$NETWORK_VOLUME/ComfyUI/requirements.txt"
 echo "✅ ComfyUI requirements installed"
 
+# Install qwen-vl-utils
+echo "Installing qwen-vl-utils>=0.0.8..."
+/opt/venv/bin/python3 -m pip install "qwen-vl-utils>=0.0.8"
+echo "✅ qwen-vl-utils installed"
+
 # Clone ComfyUI-VAE-Utils custom node
 CUSTOM_NODES_DIR="$NETWORK_VOLUME/ComfyUI/custom_nodes"
 VAE_UTILS_DIR="$CUSTOM_NODES_DIR/ComfyUI-VAE-Utils"
@@ -128,6 +133,25 @@ if [ ! -d "$FSAMPLER_DIR" ]; then
     echo "✅ ComfyUI-FSampler cloned successfully"
 else
     echo "✅ ComfyUI-FSampler already exists, skipping clone."
+fi
+
+# Clone ComfyUI-HMNodes custom node if GITHUB_PAT is set
+if [ -n "$GITHUB_PAT" ]; then
+    HMNODES_DIR="$CUSTOM_NODES_DIR/ComfyUI-HMNodes"
+    if [ ! -d "$HMNODES_DIR" ]; then
+        echo "📥 GITHUB_PAT detected. Cloning ComfyUI-HMNodes custom node..."
+        cd "$CUSTOM_NODES_DIR"
+        if git clone "https://${GITHUB_PAT}@github.com/Hearmeman24/ComfyUI-HMNodes.git" 2>&1 | tee /tmp/hmnodes_clone.log; then
+            echo "✅ ComfyUI-HMNodes cloned successfully"
+        else
+            echo "❌ Failed to clone ComfyUI-HMNodes. Error details:"
+            cat /tmp/hmnodes_clone.log
+        fi
+    else
+        echo "✅ ComfyUI-HMNodes already exists, skipping clone."
+    fi
+else
+    echo "⏭️  GITHUB_PAT not set. Skipping ComfyUI-HMNodes clone."
 fi
 
 echo "Downloading CivitAI download script to /usr/local/bin"
