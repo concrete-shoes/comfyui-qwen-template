@@ -372,11 +372,35 @@ if [ "$USE_EXTRA_MODEL_PATHS" == "true" ]; then
   COMFYUI_CMD="$COMFYUI_CMD --extra-model-paths-config /comfyui-qwen-template/src/extra_model_paths.yaml"
 fi
 
-nohup $COMFYUI_CMD > "$NETWORK_VOLUME/comfyui_${RUNPOD_POD_ID}_nohup.log" 2>&1 &
+POD_ID="${RUNPOD_POD_ID:-${INSTANCE_ID:-unknown}}"
+nohup $COMFYUI_CMD > "$NETWORK_VOLUME/comfyui_${POD_ID}_nohup.log" 2>&1 &
 until curl --silent --fail "$URL" --output /dev/null; do
-  echo "🔄  ComfyUI Starting Up... You can view the startup logs here: $NETWORK_VOLUME/comfyui_${RUNPOD_POD_ID}_nohup.log"
+  echo "🔄  ComfyUI Starting Up... You can view the startup logs here: $NETWORK_VOLUME/comfyui_${POD_ID}_nohup.log"
   sleep 2
 done
 echo "🚀 ComfyUI is ready"
+
+if [ "$ENABLE_SSH" = "true" ]; then
+    echo "🔐 Enabling SSH access..."
+
+    if ! command -v sshd >/dev/null 2>&1; then
+        echo "Installing openssh-server..."
+        apt-get update
+        apt-get install -y openssh-server
+    fi
+
+    mkdir -p /var/run/sshd
+    mkdir -p /root/.ssh
+    chmod 700 /root/.ssh
+
+    if [ -n "$SSH_PUBLIC_KEY" ]; then
+        echo "$SSH_PUBLIC_KEY" >> /root/.ssh/authorized_keys
+        chmod 600 /root/.ssh/authorized_keys
+    fi
+
+    echo "Starting sshd..."
+    /usr/sbin/sshd
+fi
+
 sleep infinity
 

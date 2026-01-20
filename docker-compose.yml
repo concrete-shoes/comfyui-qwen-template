@@ -13,6 +13,7 @@ services:
     ports:
       - "8000:8000"
       - "8188:8188"
+      - "22:22"
     volumes:
       - ./data/comfyui/output:/comfyui/output
       - ./data/runpod-volume:/runpod-volume
