@@ -4,8 +4,30 @@
 TCMALLOC="$(ldconfig -p | grep -Po "libtcmalloc.so.\d" | head -n 1)"
 export LD_PRELOAD="${TCMALLOC}"
 
-# Set the network volume path
-NETWORK_VOLUME="/workspace"
+# ---- Portable NETWORK_VOLUME detection ----
+
+is_writable() {
+  [ -d "$1" ] && [ -w "$1" ]
+}
+
+if [ -n "${NETWORK_VOLUME-}" ] && is_writable "$NETWORK_VOLUME"; then
+    echo "Using existing NETWORK_VOLUME: $NETWORK_VOLUME"
+
+elif is_writable "/workspace"; then
+    NETWORK_VOLUME="/workspace"
+    echo "Using /workspace as NETWORK_VOLUME"
+
+elif is_writable "/runpod-volume"; then
+    NETWORK_VOLUME="/runpod-volume"
+    echo "Using /runpod-volume as NETWORK_VOLUME"
+
+else
+    NETWORK_VOLUME="$(pwd)"
+    echo "Falling back to current directory as NETWORK_VOLUME: $NETWORK_VOLUME"
+fi
+
+mkdir -p "$NETWORK_VOLUME"
+export NETWORK_VOLUME
 
 # This is in case there's any special installs or overrides that needs to occur when starting the machine before starting ComfyUI
 if [ -f "/workspace/additional_params.sh" ]; then
@@ -38,16 +60,11 @@ echo "Starting SageAttention build..."
 SAGE_PID=$!
 echo "SageAttention build started in background (PID: $SAGE_PID)"
 
-# Check if NETWORK_VOLUME exists; if not, use root directory instead
-if [ ! -d "$NETWORK_VOLUME" ]; then
-    echo "NETWORK_VOLUME directory '$NETWORK_VOLUME' does not exist. You are NOT using a network volume. Setting NETWORK_VOLUME to '/' (root directory)."
-    NETWORK_VOLUME="/"
-    echo "NETWORK_VOLUME directory doesn't exist. Starting JupyterLab on root directory..."
-    jupyter-lab --ip=0.0.0.0 --allow-root --no-browser --NotebookApp.token='' --NotebookApp.password='' --ServerApp.allow_origin='*' --ServerApp.allow_credentials=True --notebook-dir=/ &
-else
-    echo "NETWORK_VOLUME directory exists. Starting JupyterLab..."
-    jupyter-lab --ip=0.0.0.0 --allow-root --no-browser --NotebookApp.token='' --NotebookApp.password='' --ServerApp.allow_origin='*' --ServerApp.allow_credentials=True --notebook-dir=/workspace &
-fi
+echo "Starting JupyterLab in $NETWORK_VOLUME"
+jupyter-lab --ip=0.0.0.0 --allow-root --no-browser \
+    --NotebookApp.token='' --NotebookApp.password='' \
+    --ServerApp.allow_origin='*' --ServerApp.allow_credentials=True \
+    --notebook-dir="$NETWORK_VOLUME" &
 
 # Check if NETWORK_VOLUME is /workspace and set up extra model paths (only if IS_DEV is true)
 USE_EXTRA_MODEL_PATHS=false
