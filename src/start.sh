@@ -152,27 +152,8 @@ else
     echo "✅ ComfyUI-FSampler already exists, skipping clone."
 fi
 
-# Clone ComfyUI-HMNodes custom node if GITHUB_PAT is set
-if [ -n "$GITHUB_PAT" ]; then
-    HMNODES_DIR="$CUSTOM_NODES_DIR/ComfyUI-HMNodes"
-    if [ ! -d "$HMNODES_DIR" ]; then
-        echo "📥 GITHUB_PAT detected. Cloning ComfyUI-HMNodes custom node..."
-        cd "$CUSTOM_NODES_DIR"
-        if git clone "https://${GITHUB_PAT}@github.com/Hearmeman24/ComfyUI-HMNodes.git" 2>&1 | tee /tmp/hmnodes_clone.log; then
-            echo "✅ ComfyUI-HMNodes cloned successfully"
-        else
-            echo "❌ Failed to clone ComfyUI-HMNodes. Error details:"
-            cat /tmp/hmnodes_clone.log
-        fi
-    else
-        echo "✅ ComfyUI-HMNodes already exists, skipping clone."
-    fi
-else
-    echo "⏭️  GITHUB_PAT not set. Skipping ComfyUI-HMNodes clone."
-fi
-
 echo "Downloading CivitAI download script to /usr/local/bin"
-git clone "https://github.com/Hearmeman24/CivitAI_Downloader.git" || { echo "Git clone failed"; exit 1; }
+git clone "https://github.com/concrete-shoes/CivitAI_Downloader.git" || { echo "Git clone failed"; exit 1; }
 mv CivitAI_Downloader/download_with_aria.py "/usr/local/bin/" || { echo "Move failed"; exit 1; }
 chmod +x "/usr/local/bin/download_with_aria.py" || { echo "Chmod failed"; exit 1; }
 rm -rf CivitAI_Downloader  # Clean up the cloned repo
@@ -224,7 +205,7 @@ download_model "https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/mai
 download_model "https://objectstorage.us-phoenix-1.oraclecloud.com/n/ax6ygfvpvzka/b/open-modeldb-files/o/1x-ITF-SkinDiffDetail-Lite-v1.pth" "$UPSCALE_MODELS_DIR/1x-ITF-SkinDiffDetail-Lite-v1.pth"
 
 # Download z_image models if download_z_image is set to true
-if [ "$download_z_image" = "true" ]; then
+if [ "$DOWNLOAD_Z_IMAGE" = "true" ]; then
     echo "📥 download_z_image is set to true. Downloading z_image models..."
     download_model "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/diffusion_models/z_image_turbo_bf16.safetensors" "$DIFFUSION_MODELS_DIR/z_image_turbo_bf16.safetensors"
     download_model "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/text_encoders/qwen_3_4b.safetensors" "$TEXT_ENCODERS_DIR/qwen_3_4b.safetensors"
@@ -389,12 +370,13 @@ if [ "$USE_EXTRA_MODEL_PATHS" == "true" ]; then
   COMFYUI_CMD="$COMFYUI_CMD --extra-model-paths-config /comfyui-qwen-template/src/extra_model_paths.yaml"
 fi
 
-POD_ID="${RUNPOD_POD_ID:-${INSTANCE_ID:-unknown}}"
-nohup $COMFYUI_CMD > "$NETWORK_VOLUME/comfyui_${POD_ID}_nohup.log" 2>&1 &
+nohup $COMFYUI_CMD > "$NETWORK_VOLUME/comfyui_nohup.log" 2>&1 &
+
 until curl --silent --fail "$URL" --output /dev/null; do
-  echo "🔄  ComfyUI Starting Up... You can view the startup logs here: $NETWORK_VOLUME/comfyui_${POD_ID}_nohup.log"
+  echo "🔄  ComfyUI Starting Up... You can view the startup logs here: $NETWORK_VOLUME/comfyui_nohup.log"
   sleep 2
 done
+
 echo "🚀 ComfyUI is ready"
 
 # ================================
