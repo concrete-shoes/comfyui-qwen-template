@@ -11,7 +11,8 @@ CIVITAI_TOKEN=""
 SSH_PUBLIC_KEY=""
 
 Ports:
-8188     (HTTP)
+8188     (ComfyUI)
+8888     (Jupyter)
 22       (SSH) 
 
 
