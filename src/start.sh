@@ -397,27 +397,29 @@ until curl --silent --fail "$URL" --output /dev/null; do
 done
 echo "🚀 ComfyUI is ready"
 
-if [ "$ENABLE_SSH" = "true" ]; then
-    echo "🔐 Enabling SSH access..."
+# ================================
+# SSH Startup
+# ================================
 
-    if ! command -v sshd >/dev/null 2>&1; then
-        echo "Installing openssh-server..."
-        apt-get update
-        apt-get install -y openssh-server
-    fi
+echo "🔐 Starting SSH server..."
 
-    mkdir -p /var/run/sshd
-    mkdir -p /root/.ssh
-    chmod 700 /root/.ssh
+mkdir -p /var/run/sshd
+chmod 700 /root/.ssh
 
-    if [ -n "$SSH_PUBLIC_KEY" ]; then
+# If SSH_PUBLIC_KEY provided via env, append safely
+if [ -n "${SSH_PUBLIC_KEY:-}" ]; then
+    echo "Adding SSH_PUBLIC_KEY from environment..."
+    touch /root/.ssh/authorized_keys
+    chmod 600 /root/.ssh/authorized_keys
+
+    # Avoid duplicates
+    grep -qxF "$SSH_PUBLIC_KEY" /root/.ssh/authorized_keys 2>/dev/null || \
         echo "$SSH_PUBLIC_KEY" >> /root/.ssh/authorized_keys
-        chmod 600 /root/.ssh/authorized_keys
-    fi
-
-    echo "Starting sshd..."
-    /usr/sbin/sshd
 fi
+
+/usr/sbin/sshd
+
+echo "✅ SSH ready."
 
 sleep infinity
 

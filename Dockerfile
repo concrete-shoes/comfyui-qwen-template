@@ -88,6 +88,16 @@ RUN for repo in \
         fi; \
     done
 
+# OpenSSH Daemon    
+RUN apt-get update && apt-get install -y openssh-server \
+    && mkdir -p /root/.ssh \
+    && chmod 700 /root/.ssh \
+    && mkdir -p /var/run/sshd \
+    && sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config \
+    && sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config \
+    && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin prohibit-password/' /etc/ssh/sshd_config \
+    && sed -i 's/PermitRootLogin yes/PermitRootLogin prohibit-password/' /etc/ssh/sshd_config \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY src/start_script.sh /start_script.sh
 RUN chmod +x /start_script.sh
