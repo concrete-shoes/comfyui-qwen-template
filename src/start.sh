@@ -204,8 +204,8 @@ download_model "https://huggingface.co/spacepxl/Wan2.1-VAE-upscale2x/resolve/mai
 download_model "https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-8steps-V1.1.safetensors" "$LORAS_DIR/Qwen-Image-Lightning-8steps-V1.1.safetensors"
 download_model "https://objectstorage.us-phoenix-1.oraclecloud.com/n/ax6ygfvpvzka/b/open-modeldb-files/o/1x-ITF-SkinDiffDetail-Lite-v1.pth" "$UPSCALE_MODELS_DIR/1x-ITF-SkinDiffDetail-Lite-v1.pth"
 
-# Download z_image models if download_z_image is set to true
-if [ "$DOWNLOAD_Z_IMAGE" = "true" ]; then
+# Default Z-Image Turbo by default
+if [ "${DOWNLOAD_Z_IMAGE:-true}" = "true" ]; then
     echo "📥 download_z_image is set to true. Downloading z_image models..."
     download_model "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/diffusion_models/z_image_turbo_bf16.safetensors" "$DIFFUSION_MODELS_DIR/z_image_turbo_bf16.safetensors"
     download_model "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/text_encoders/qwen_3_4b.safetensors" "$TEXT_ENCODERS_DIR/qwen_3_4b.safetensors"
