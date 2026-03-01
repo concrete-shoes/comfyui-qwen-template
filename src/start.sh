@@ -7,7 +7,7 @@ export LD_PRELOAD="${TCMALLOC}"
 # ---- Portable NETWORK_VOLUME detection ----
 
 is_writable() {
-  [ -d "$1" ] && [ -w "$1" ]
+  [ -d "$1" ] && touch "$1/.write_test" 2>/dev/null && rm -f "$1/.write_test"
 }
 
 if [ -n "${NETWORK_VOLUME-}" ] && is_writable "$NETWORK_VOLUME"; then
@@ -22,7 +22,7 @@ elif is_writable "/runpod-volume"; then
     echo "Using /runpod-volume as NETWORK_VOLUME"
 
 else
-    NETWORK_VOLUME="$(pwd)"
+    NETWORK_VOLUME="$PWD"
     echo "Falling back to current directory as NETWORK_VOLUME: $NETWORK_VOLUME"
 fi
 

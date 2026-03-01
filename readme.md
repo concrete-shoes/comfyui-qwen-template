@@ -11,7 +11,6 @@ DOWNLOAD_Z_IMAGE=""
 ### Auth Tokens
 
 ```env
-HUGGINGFACE_HUB_TOKEN=""
 CIVITAI_TOKEN=""
 SSH_PUBLIC_KEY=""
 ```
