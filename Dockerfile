@@ -71,6 +71,7 @@ RUN for repo in \
     https://github.com/chflame163/ComfyUI_LayerStyle_Advance.git \
     https://github.com/bash-j/mikey_nodes.git \
     https://github.com/chrisgoringe/cg-use-everywhere.git \
+    https://github.com/PGCRT/CRT-Nodes.git \
     https://github.com/M1kep/ComfyLiterals.git; \
     do \
         cd /ComfyUI/custom_nodes; \
