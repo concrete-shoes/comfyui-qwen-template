@@ -30,12 +30,12 @@ mkdir -p "$NETWORK_VOLUME"
 export NETWORK_VOLUME
 
 # This is in case there's any special installs or overrides that needs to occur when starting the machine before starting ComfyUI
-if [ -f "/workspace/additional_params.sh" ]; then
-    chmod +x /workspace/additional_params.sh
+if [ -f "$NETWORK_VOLUME/additional_params.sh" ]; then
+    chmod +x "$NETWORK_VOLUME/additional_params.sh"
     echo "Executing additional_params.sh..."
-    /workspace/additional_params.sh
+    "$NETWORK_VOLUME/additional_params.sh"
 else
-    echo "additional_params.sh not found in /workspace. Skipping..."
+    echo "No additional_params.sh found. Skipping..."
 fi
 
 if ! which aria2 > /dev/null 2>&1; then
