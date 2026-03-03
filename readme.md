@@ -23,6 +23,17 @@ SSH_PUBLIC_KEY=""
 | 8888 | Jupyter  |
 | 22   | SSH      |
 
+### Accessing the Instance
+
+You can transfer files using `rsync` and connect via SSH:
+
+```bash
+# Example: sync local dataset to remote
+rsync -avP /path/to/local/dataset/ root@<INSTANCE_IP>:/path/to/remote/dataset/
+
+# SSH with port forwarding for JupyterLab
+ssh -p <SSH_PORT> root@<INSTANCE_IP> -L 8888:localhost:8888
+```
 ---
 
 # Civitai Downloader
