@@ -100,9 +100,20 @@ RUN apt-get update && apt-get install -y openssh-server \
     && sed -i 's/PermitRootLogin yes/PermitRootLogin prohibit-password/' /etc/ssh/sshd_config \
     && rm -rf /var/lib/apt/lists/*
 
+# Copy start script and other required files
 COPY src/start_script.sh /start_script.sh
-RUN chmod +x /start_script.sh
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 COPY Eyes.pt /Eyes.pt
 COPY 4xLSDIR.pth /4xLSDIR.pth
 
+# Make scripts executable
+RUN chmod +x /start_script.sh /docker-entrypoint.sh
+
+# Convert all shell scripts to Linux line endings
+RUN apt-get update && apt-get install -y dos2unix \
+    && find / -type f -name "*.sh" -exec dos2unix {} \; \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Entrypoint + default command
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/start_script.sh"]

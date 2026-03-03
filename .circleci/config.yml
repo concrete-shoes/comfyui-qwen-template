@@ -1,3 +1,4 @@
+# .circleci/config.yml (CircleCI 2.1)
 version: 2.1
 
 executors:
@@ -14,22 +15,42 @@ jobs:
     executor: docker-dind
     steps:
       - checkout
+
       - run:
           name: Log in to Docker Hub
           command: |
             echo "$DOCKERHUB_PAT" | docker login -u "$DOCKERHUB_USER" --password-stdin
 
       - run:
-          name: Build & push without cache
+          name: Check for CRLF line endings
           command: |
-            TAG="${CIRCLE_TAG:-latest}"
+            if grep -rlI $'\r' ./; then
+              echo "ERROR: CRLF line endings detected! Convert all scripts to LF before building."
+              exit 1
+            else
+              echo "✅ No CRLF detected. All files are LF."
+            fi
+
+      - run:
+          name: Build & push image
+          command: |
+            # Use Git tag as version
+            TAG="${CIRCLE_TAG}"
+            if [ -z "$TAG" ]; then
+              echo "Error: This job should only run on Git tags."
+              exit 1
+            fi
+
             IMG="docker.io/$DOCKERHUB_USER/comfyui-qwen-template"
-            
-            docker build \
-              --progress=plain \
-              -t "${IMG}:${TAG}" .
-            
+
+            echo "Building and pushing ${IMG}:${TAG} ..."
+            docker build --progress=plain -t "${IMG}:${TAG}" .
             docker push "${IMG}:${TAG}"
+
+            # Also update latest
+            echo "Tagging and pushing ${IMG}:latest ..."
+            docker tag "${IMG}:${TAG}" "${IMG}:latest"
+            docker push "${IMG}:latest"
 
 workflows:
   version: 2
@@ -39,6 +60,6 @@ workflows:
           context: docker-hub
           filters:
             tags:
-              only: /^v[0-9]+(\.[0-9]+)*$/  # run on tags like v5 or v1.2.3
+              only: /^v[0-9]+(\.[0-9]+)*$/   # Only Git tags like v1, v1.2, v1.2.3
             branches:
-              ignore: /.*/
+              ignore: /.*/                   # Ignore all branch pushes

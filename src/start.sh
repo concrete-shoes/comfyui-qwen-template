@@ -379,6 +379,26 @@ done
 
 echo "🚀 ComfyUI is ready"
 
+echo ""
+echo "================================================"
+echo ""
+echo "  Template ready!"
+echo ""
+echo "  To access JupyterLab from your local machine:"
+echo ""
+echo "  1) Use the SSH command provided by your host (Vast.ai / RunPod),"
+echo "     and add port forwarding like this:"
+echo ""
+echo "     ssh -p <SSH_PORT> root@<INSTANCE_IP> -L 8888:localhost:8888"
+echo ""
+echo "  2) Then open your browser:"
+echo "     http://localhost:8888/lab"
+echo ""
+echo "  You can also access it via the RunPod web interface if deployed there"
+echo ""
+echo "================================================"
+echo ""
+
 # ================================
 # SSH Startup
 # ================================
