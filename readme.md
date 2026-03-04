@@ -1,8 +1,8 @@
 # ComfyUI Qwen & Z-Image Turbo w/ Sage Attention for CUDA 12.8
 
-## Variables Selection
+### Variables Selection
 
-Z-Image comes by default, set it to `false` if desired:
+Z-Image Turbo comes by default, set it to `false` if desired:
 
 ```env
 DOWNLOAD_Z_IMAGE=""
@@ -29,16 +29,33 @@ You can transfer files using `rsync` and connect via SSH:
 
 ```bash
 # Example: sync local dataset to remote
-rsync -avP /path/to/local/dataset/ root@<INSTANCE_IP>:/path/to/remote/dataset/
+rsync -avP /path/to/local/dataset/ user@<SERVER_IP>:/path/to/remote/dataset/
 
 # SSH with port forwarding for JupyterLab
-ssh -p <SSH_PORT> root@<INSTANCE_IP> -L 8888:localhost:8888
+ssh -p <SSH_PORT> user@<SERVER_IP> -L 8888:localhost:8888
+```
+Then open your browser to:
+```bash
+http://localhost:8888/lab
+```
+
+#### Accessing ComfyUI GUI
+
+ComfyUI runs its interface on port `8188`. To access it from your local browser, use SSH port forwarding:
+
+```bash
+# SSH with port forwarding for ComfyUI
+ssh -p <SSH_PORT> user@<SERVER_IP> -L 8188:localhost:8188
+```
+Then open your browser to:
+```bash
+http://localhost:8188
 ```
 ---
 
 # Civitai Downloader
 
-## 📖 Usage
+### 📖 Usage
 
 Download a model using its ID:
 
@@ -58,7 +75,7 @@ Download a model using its ID:
 ./download_with_aria.py -m 123456 --token "your_token_here"
 ```
 
-## Command Line Arguments
+### Command Line Arguments
 
 | Argument     | Short | Description                          |
 |--------------|-------|--------------------------------------|
@@ -70,7 +87,7 @@ Download a model using its ID:
 
 ---
 
-## 🎯 Examples
+### 🎯 Examples
 
 **Download a LoRA model:**
 
