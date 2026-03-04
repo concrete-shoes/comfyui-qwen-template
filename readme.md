@@ -25,14 +25,31 @@ SSH_PUBLIC_KEY=""
 
 ### Accessing the Instance
 
+```bash 
+If you are using custom SSH key location you might want to create a config file in
+~/.ssh/config for Linux or $HOME\.ssh\config for Windows.
+```
+Linux:
+```bash
+Host *
+    IdentityFile PATH/.ssh/id_ed25519
+    IdentitiesOnly yes
+```
+Windows:
+```bash 
+Host *
+    IdentityFile PATH\.ssh\id_ed25519
+    IdentitiesOnly yes
+```
+
 You can transfer files using `rsync` and connect via SSH:
 
 ```bash
 # Example: sync local dataset to remote
-rsync -avP /path/to/local/dataset/ user@<SERVER_IP>:/path/to/remote/dataset/
+rsync -avP /path/to/local/dataset/ hostname@<SERVER_IP>:/path/to/remote/dataset/
 
 # SSH with port forwarding for JupyterLab
-ssh -p <SSH_PORT> user@<SERVER_IP> -L 8888:localhost:8888
+ssh -p <SSH_PORT> hostname@<SERVER_IP> -L 8888:localhost:8888
 ```
 Then open your browser to:
 ```bash
@@ -45,7 +62,7 @@ ComfyUI runs its interface on port `8188`. To access it from your local browser,
 
 ```bash
 # SSH with port forwarding for ComfyUI
-ssh -p <SSH_PORT> user@<SERVER_IP> -L 8188:localhost:8188
+ssh -p <SSH_PORT> hostname@<SERVER_IP> -L 8188:localhost:8188
 ```
 Then open your browser to:
 ```bash
