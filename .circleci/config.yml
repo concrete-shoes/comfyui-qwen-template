@@ -13,6 +13,15 @@ executors:
 jobs:
   build_and_push:
     executor: docker-dind
+    parameters:
+      tag_name:
+        type: string
+      push_latest:
+        type: boolean
+        default: true
+      push_experimental:
+        type: boolean
+        default: false
     steps:
       - checkout
 
@@ -34,32 +43,48 @@ jobs:
       - run:
           name: Build & push image
           command: |
-            # Use Git tag as version
-            TAG="${CIRCLE_TAG}"
-            if [ -z "$TAG" ]; then
-              echo "Error: This job should only run on Git tags."
-              exit 1
-            fi
-
+            TAG="<< parameters.tag_name >>"
             IMG="docker.io/$DOCKERHUB_USER/comfyui-qwen-template"
 
             echo "Building and pushing ${IMG}:${TAG} ..."
             docker build --progress=plain -t "${IMG}:${TAG}" .
             docker push "${IMG}:${TAG}"
 
-            # Also update latest
-            echo "Tagging and pushing ${IMG}:latest ..."
-            docker tag "${IMG}:${TAG}" "${IMG}:latest"
-            docker push "${IMG}:latest"
+            # Push latest if requested (main tags)
+            if << parameters.push_latest >>; then
+              echo "Tagging and pushing ${IMG}:latest ..."
+              docker tag "${IMG}:${TAG}" "${IMG}:latest"
+              docker push "${IMG}:latest"
+            fi
+
+            # Push experimental tag if requested
+            if << parameters.push_experimental >>; then
+              echo "Tagging and pushing ${IMG}:experimental ..."
+              docker tag "${IMG}:${TAG}" "${IMG}:experimental"
+              docker push "${IMG}:experimental"
+            fi
 
 workflows:
   version: 2
   build_on_tag:
     jobs:
+      # Main release tags vX.Y.Z
       - build_and_push:
-          context: docker-hub
+          tag_name: << pipeline.git.tag >>
+          push_latest: true
           filters:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*$/   # Only Git tags like v1, v1.2, v1.2.3
             branches:
-              ignore: /.*/                   # Ignore all branch pushes
+              ignore: /.*/
+
+      # Experimental tags v0.0.0-e (from experimental branch)
+      - build_and_push:
+          tag_name: << pipeline.git.tag >>
+          push_latest: false
+          push_experimental: true
+          filters:
+            tags:
+              only: /^v0\.0\.0-.*$/   # Example: v0.0.0-e, v0.0.0-alpha
+            branches:
+              only: experimental
