@@ -4,26 +4,38 @@
 TCMALLOC="$(ldconfig -p | grep -Po "libtcmalloc.so.\d" | head -n 1)"
 export LD_PRELOAD="${TCMALLOC}"
 
-# ---- Portable NETWORK_VOLUME detection ----
+# Function to check if a directory exists and is writable
+can_write_to() {
+    local target="$1"
+    [ -z "$target" ] && return 1
 
-is_writable() {
-  [ -d "$1" ] && touch "$1/.write_test" 2>/dev/null && rm -f "$1/.write_test"
+    if [ -d "$target" ]; then
+        touch "$target/.write_test" 2>/dev/null || return 1
+        rm -f "$target/.write_test"
+    else
+        mkdir -p "$target" 2>/dev/null || return 1
+        touch "$target/.write_test" 2>/dev/null || return 1
+        rm -f "$target/.write_test"
+    fi
+
+    return 0
 }
 
-if [ -n "${NETWORK_VOLUME-}" ] && is_writable "$NETWORK_VOLUME"; then
-    echo "Using existing NETWORK_VOLUME: $NETWORK_VOLUME"
+# Determine NETWORK_VOLUME
+if [ -n "${NETWORK_VOLUME-}" ] && can_write_to "$NETWORK_VOLUME"; then
+    echo "Using provided NETWORK_VOLUME: $NETWORK_VOLUME"
 
-elif is_writable "/workspace"; then
+elif can_write_to "/workspace"; then
     NETWORK_VOLUME="/workspace"
-    echo "Using /workspace as NETWORK_VOLUME"
+    echo "Defaulting to /workspace"
 
-elif is_writable "/runpod-volume"; then
+elif can_write_to "/runpod-volume"; then
     NETWORK_VOLUME="/runpod-volume"
-    echo "Using /runpod-volume as NETWORK_VOLUME"
+    echo "Defaulting to /runpod-volume"
 
 else
-    NETWORK_VOLUME="$PWD"
-    echo "Falling back to current directory as NETWORK_VOLUME: $NETWORK_VOLUME"
+    NETWORK_VOLUME="$(pwd)"
+    echo "Fallback to current dir: $NETWORK_VOLUME"
 fi
 
 mkdir -p "$NETWORK_VOLUME"
@@ -74,11 +86,11 @@ if [ "$IS_DEV" = "true" ] && [ "$NETWORK_VOLUME" = "/workspace" ]; then
     # Create /models/diffusion_models directory
     mkdir -p /models/diffusion_models
     
-    # Copy all .safetensors files from /workspace/ComfyUI/models/diffusion_models to /models/diffusion_models in background
-    if [ -d "/workspace/ComfyUI/models/diffusion_models" ]; then
-        echo "Copying .safetensors files from /workspace/ComfyUI/models/diffusion_models to /models/diffusion_models in background..."
+    # Copy all .safetensors files from $NETWORK_VOLUME/ComfyUI/models/diffusion_models to /models/diffusion_models in background
+    if [ -d "$NETWORK_VOLUME/ComfyUI/models/diffusion_models" ]; then
+        echo "Copying .safetensors files from $NETWORK_VOLUME/ComfyUI/models/diffusion_models to /models/diffusion_models in background..."
         (
-            find /workspace/ComfyUI/models/diffusion_models -name "*.safetensors" -type f | while read -r file; do
+            find $NETWORK_VOLUME/ComfyUI/models/diffusion_models -name "*.safetensors" -type f | while read -r file; do
                 filename=$(basename "$file")
                 cp "$file" "/models/diffusion_models/disk_${filename}"
             done
@@ -86,7 +98,7 @@ if [ "$IS_DEV" = "true" ] && [ "$NETWORK_VOLUME" = "/workspace" ]; then
         ) > /tmp/model_copy.log 2>&1 &
         USE_EXTRA_MODEL_PATHS=true
     else
-        echo "⚠️  Source directory /workspace/ComfyUI/models/diffusion_models does not exist. Skipping copy."
+        echo "⚠️  Source directory $NETWORK_VOLUME/ComfyUI/models/diffusion_models does not exist. Skipping copy."
     fi
 else
     if [ "$IS_DEV" != "true" ]; then
