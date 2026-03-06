@@ -9,6 +9,7 @@ executors:
     environment:
       DOCKER_BUILDKIT: 1
       COMPOSE_DOCKER_CLI_BUILD: 1
+      IMAGE_NAME: docker.io/$DOCKERHUB_USER/comfyui-qwen-template
 
 jobs:
   build_and_push:
@@ -16,12 +17,8 @@ jobs:
     parameters:
       tag_name:
         type: string
-      push_latest:
-        type: boolean
-        default: true
-      push_experimental:
-        type: boolean
-        default: false
+      channel:
+        type: string   # "stable" or "experimental"
     steps:
       - checkout
 
@@ -29,6 +26,14 @@ jobs:
           name: Log in to Docker Hub
           command: |
             echo "$DOCKERHUB_PAT" | docker login -u "$DOCKERHUB_USER" --password-stdin
+
+      - run:
+          name: Validate tag
+          command: |
+            if [ -z "<< parameters.tag_name >>" ]; then
+              echo "ERROR: tag_name is empty. This job must be triggered by a Git tag."
+              exit 1
+            fi
 
       - run:
           name: Check for CRLF line endings
@@ -44,47 +49,43 @@ jobs:
           name: Build & push image
           command: |
             TAG="<< parameters.tag_name >>"
-            IMG="docker.io/$DOCKERHUB_USER/comfyui-qwen-template"
+            IMG="$IMAGE_NAME"
 
-            echo "Building and pushing ${IMG}:${TAG} ..."
+            echo "Building ${IMG}:${TAG}"
             docker build --progress=plain -t "${IMG}:${TAG}" .
             docker push "${IMG}:${TAG}"
 
-            # Push latest if requested (main tags)
-            if << parameters.push_latest >>; then
-              echo "Tagging and pushing ${IMG}:latest ..."
+            if [ "<< parameters.channel >>" = "stable" ]; then
               docker tag "${IMG}:${TAG}" "${IMG}:latest"
               docker push "${IMG}:latest"
             fi
 
-            # Push experimental tag if requested
-            if << parameters.push_experimental >>; then
-              echo "Tagging and pushing ${IMG}:experimental ..."
+            if [ "<< parameters.channel >>" = "experimental" ]; then
               docker tag "${IMG}:${TAG}" "${IMG}:experimental"
               docker push "${IMG}:experimental"
             fi
 
 workflows:
   version: 2
-  build_on_tag:
+
+  release_builds:
     jobs:
-      # Main release tags vX.Y.Z
+      # Stable releases: v1.2.3
       - build_and_push:
           tag_name: << pipeline.git.tag >>
-          push_latest: true
+          channel: "stable"
           filters:
             tags:
-              only: /^v[0-9]+(\.[0-9]+)*$/   # Only Git tags like v1, v1.2, v1.2.3
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
             branches:
               ignore: /.*/
 
-      # Experimental tags v0.0.0-e (from experimental branch)
+      # Experimental releases: v1.2.3-e
       - build_and_push:
           tag_name: << pipeline.git.tag >>
-          push_latest: false
-          push_experimental: true
+          channel: "experimental"
           filters:
             tags:
-              only: /^v0\.0\.0-.*$/   # Example: v0.0.0-e, v0.0.0-alpha
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+-e$/
             branches:
-              only: experimental
+              ignore: /.*/
