@@ -1,4 +1,4 @@
-# .circleci/config.yml (CircleCI 2.1)
+# .circleci/config.yml
 version: 2.1
 
 executors:
@@ -9,7 +9,6 @@ executors:
     environment:
       DOCKER_BUILDKIT: 1
       COMPOSE_DOCKER_CLI_BUILD: 1
-      IMAGE_NAME: docker.io/$DOCKERHUB_USER/comfyui-qwen-template
 
 jobs:
   build_and_push:
@@ -31,8 +30,8 @@ jobs:
           name: Validate tag
           command: |
             if [ -z "<< parameters.tag_name >>" ]; then
-              echo "ERROR: tag_name is empty. This job must be triggered by a Git tag."
-              exit 1
+              echo "No tag found for this pipeline run — skipping image build."
+              exit 0
             fi
 
       - run:
@@ -49,43 +48,44 @@ jobs:
           name: Build & push image
           command: |
             TAG="<< parameters.tag_name >>"
-            IMG="$IMAGE_NAME"
+            IMG="docker.io/${DOCKERHUB_USER}/comfyui-qwen-template"
 
             echo "Building ${IMG}:${TAG}"
             docker build --progress=plain -t "${IMG}:${TAG}" .
             docker push "${IMG}:${TAG}"
 
             if [ "<< parameters.channel >>" = "stable" ]; then
+              echo "Tagging and pushing ${IMG}:latest"
               docker tag "${IMG}:${TAG}" "${IMG}:latest"
               docker push "${IMG}:latest"
             fi
 
             if [ "<< parameters.channel >>" = "experimental" ]; then
+              echo "Tagging and pushing ${IMG}:experimental"
               docker tag "${IMG}:${TAG}" "${IMG}:experimental"
               docker push "${IMG}:experimental"
             fi
 
 workflows:
   version: 2
-
   release_builds:
     jobs:
-      # Stable releases: v1.2.3
+      # Stable releases: vX.Y.Z only on master
       - build_and_push:
           tag_name: << pipeline.git.tag >>
           channel: "stable"
           filters:
+            branches:
+              only: master
             tags:
               only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
-            branches:
-              ignore: /.*/
 
-      # Experimental releases: v1.2.3-e
+      # Experimental releases: vX.Y.Z-e only on experimental branch
       - build_and_push:
           tag_name: << pipeline.git.tag >>
           channel: "experimental"
           filters:
+            branches:
+              only: experimental
             tags:
               only: /^v[0-9]+\.[0-9]+\.[0-9]+-e$/
-            branches:
-              ignore: /.*/
