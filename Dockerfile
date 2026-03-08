@@ -31,7 +31,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 ENV PATH="/opt/venv/bin:$PATH"
 
 RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --pre torch torchvision torchaudio \
+    pip install --no-cache-dir --pre torch torchvision torchaudio \
         --index-url https://download.pytorch.org/whl/nightly/cu128
 
 # Core Python tooling
@@ -48,7 +48,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     /usr/bin/yes | comfy --workspace /ComfyUI install
 
 FROM base AS final
-RUN python -m pip install opencv-python
+RUN python -m pip install --no-cache-dir opencv-python
 
 RUN for repo in \
     https://github.com/ssitu/ComfyUI_UltimateSDUpscale.git \
@@ -82,7 +82,7 @@ RUN for repo in \
             git clone "$repo"; \
         fi; \
         if [ -f "/ComfyUI/custom_nodes/$repo_dir/requirements.txt" ]; then \
-            pip install -r "/ComfyUI/custom_nodes/$repo_dir/requirements.txt"; \
+            pip install --no-cache-dir -r "/ComfyUI/custom_nodes/$repo_dir/requirements.txt"; \
         fi; \
         if [ -f "/ComfyUI/custom_nodes/$repo_dir/install.py" ]; then \
             python "/ComfyUI/custom_nodes/$repo_dir/install.py"; \
